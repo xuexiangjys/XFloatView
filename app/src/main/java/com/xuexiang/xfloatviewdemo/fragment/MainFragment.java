@@ -34,7 +34,8 @@ public class MainFragment extends XPageContainerListFragment {
     @Override
     protected Class[] getPagesClasses() {
         return new Class[] {
-                NetWorkMonitorFragment.class
+                NetWorkMonitorFragment.class,
+                SmartViewFragment.class
         };
     }
 

@@ -55,6 +55,8 @@ dependencies {
     testImplementation deps.junit
     androidTestImplementation deps.runner
     androidTestImplementation deps.espresso.core
+    implementation deps.support.recyclerview
+
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:1.1.4'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:1.1.4'
     //XPage

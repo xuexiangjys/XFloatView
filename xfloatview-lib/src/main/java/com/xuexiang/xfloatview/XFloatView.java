@@ -79,9 +79,9 @@ public abstract class XFloatView implements OnTouchListener {
 
         initFloatRootView(getLayoutId());
 
-        initFloatView();
-
         initFloatViewPosition();
+
+        initFloatView();
 
         initListener();
     }

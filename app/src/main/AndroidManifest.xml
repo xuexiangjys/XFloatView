@@ -20,6 +20,7 @@
         </activity>
 
         <service android:name=".service.NetWorkMonitorService" />
+        <service android:name=".service.SmartViewService" />
     </application>
 
 </manifest>

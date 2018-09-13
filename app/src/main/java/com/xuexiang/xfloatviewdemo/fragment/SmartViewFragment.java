@@ -16,31 +16,23 @@
 
 package com.xuexiang.xfloatviewdemo.fragment;
 
-import com.xuexiang.xfloatviewdemo.service.NetWorkMonitorService;
+import com.xuexiang.xfloatviewdemo.service.SmartViewService;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
-import com.xuexiang.xutil.system.PermissionUtils;
 
 import java.util.List;
 
 /**
  * @author xuexiang
- * @since 2018/9/13 上午11:28
+ * @since 2018/9/13 下午2:34
  */
-@Page(name = "网速监测服务")
-public class NetWorkMonitorFragment extends XPageSimpleListFragment {
-
-    @Override
-    protected void initArgs() {
-        super.initArgs();
-        PermissionUtils.requestSystemAlertWindow(getActivity());
-    }
+@Page(name = "智能控制盘")
+public class SmartViewFragment extends XPageSimpleListFragment {
 
     @Override
     protected List<String> initSimpleData(List<String> lists) {
         lists.add("启动");
         lists.add("关闭");
-        lists.add("选择应用监测");
         return lists;
     }
 
@@ -48,13 +40,11 @@ public class NetWorkMonitorFragment extends XPageSimpleListFragment {
     protected void onItemClick(int position) {
         switch(position) {
             case 0:
-                NetWorkMonitorService.start(getContext(), null);
+                SmartViewService.start(getContext());
                 break;
             case 1:
-                NetWorkMonitorService.stop(getContext());
+                SmartViewService.stop(getContext());
                 break;
-            case 2:
-                openPage(AppTrafficFragment.class);
             default:
                 break;
         }
