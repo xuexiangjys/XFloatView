@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:background="#80000000"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="应用："
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_upload_speed_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上传速度"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_download_speed_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="下载速度"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

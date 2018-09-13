@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/iv_app_launcher"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_app_launcher"
+        android:layout_toLeftOf="@+id/tv_app_download"
+        android:layout_marginLeft="4dp"
+        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:text="app name"/>
+
+    <TextView
+        android:id="@+id/tv_app_upload"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/tv_app_download"
+        android:layout_marginLeft="4dp"
+        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:text="download"/>
+
+    <TextView
+        android:id="@+id/tv_app_download"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="4dp"
+        android:singleLine="true"
+        android:layout_centerVertical="true"
+        android:text="upload"/>
+
+</RelativeLayout>
