@@ -70,5 +70,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
-    implementation project(':xfloatview-lib')
+//    implementation project(':xfloatview-lib')
+
+    implementation 'com.github.xuexiangjys:XFloatView:1.0.0'
 }
