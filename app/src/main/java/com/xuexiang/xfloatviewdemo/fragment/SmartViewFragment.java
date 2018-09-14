@@ -19,6 +19,7 @@ package com.xuexiang.xfloatviewdemo.fragment;
 import com.xuexiang.xfloatviewdemo.service.SmartViewService;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
+import com.xuexiang.xutil.system.PermissionUtils;
 
 import java.util.List;
 
@@ -28,6 +29,12 @@ import java.util.List;
  */
 @Page(name = "智能控制盘")
 public class SmartViewFragment extends XPageSimpleListFragment {
+
+    @Override
+    protected void initArgs() {
+        super.initArgs();
+        PermissionUtils.requestSystemAlertWindow(getActivity());
+    }
 
     @Override
     protected List<String> initSimpleData(List<String> lists) {
