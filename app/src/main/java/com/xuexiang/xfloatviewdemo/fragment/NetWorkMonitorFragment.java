@@ -20,7 +20,6 @@ import com.xuexiang.xfloatview.permission.FloatWindowPermission;
 import com.xuexiang.xfloatviewdemo.service.NetWorkMonitorService;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
-import com.xuexiang.xutil.system.PermissionUtils;
 
 import java.util.List;
 

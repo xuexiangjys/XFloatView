@@ -55,7 +55,7 @@ allprojects {
 ```
 dependencies {
   ...
-  implementation 'com.github.xuexiangjys:XFloatView:1.0.0'
+  implementation 'com.github.xuexiangjys:XFloatView:1.0.1'
 }
 ```
 
@@ -92,6 +92,11 @@ protected abstract boolean isAdsorbView();
 
 [点击查看示例代码](https://github.com/xuexiangjys/XFloatView/tree/master/app/src/main/java/com/xuexiang/xfloatviewdemo/widget)
 
+### 2.3、悬浮窗的权限申请
+
+```
+FloatWindowPermission.getInstance().applyFloatWindowPermission(getContext());
+```
 
 ## 联系方式
 
@@ -100,7 +105,7 @@ protected abstract boolean isAdsorbView();
 ![](https://github.com/xuexiangjys/XPage/blob/master/img/qq_group.jpg)
 
 
-[xfvsvg]: https://img.shields.io/badge/XFloatView-v1.0.0-brightgreen.svg
+[xfvsvg]: https://img.shields.io/badge/XFloatView-v1.0.1-brightgreen.svg
 [xfv]: https://github.com/xuexiangjys/XFloatView
 [apisvg]: https://img.shields.io/badge/API-14+-brightgreen.svg
 [api]: https://android-arsenal.com/api?level=14

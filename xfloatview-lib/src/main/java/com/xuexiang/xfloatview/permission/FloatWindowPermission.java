@@ -33,7 +33,6 @@ import com.xuexiang.xfloatview.permission.rom.OppoUtils;
 import com.xuexiang.xfloatview.permission.rom.QikuUtils;
 import com.xuexiang.xfloatview.permission.rom.RomUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -46,19 +45,19 @@ public class FloatWindowPermission {
     private static final String TAG = "FloatWindowPermission";
     public static final int REQUEST_OVERLAY_PERMISSION_CODE = 10001;
 
-    private static volatile FloatWindowPermission instance;
+    private static volatile FloatWindowPermission sInstance;
 
     private Dialog dialog;
 
     public static FloatWindowPermission getInstance() {
-        if (instance == null) {
+        if (sInstance == null) {
             synchronized (FloatWindowPermission.class) {
-                if (instance == null) {
-                    instance = new FloatWindowPermission();
+                if (sInstance == null) {
+                    sInstance = new FloatWindowPermission();
                 }
             }
         }
-        return instance;
+        return sInstance;
     }
 
     public void applyFloatWindowPermission(Context context) {
