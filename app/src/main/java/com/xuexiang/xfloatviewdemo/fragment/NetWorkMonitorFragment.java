@@ -16,6 +16,7 @@
 
 package com.xuexiang.xfloatviewdemo.fragment;
 
+import com.xuexiang.xfloatview.permission.FloatWindowPermission;
 import com.xuexiang.xfloatviewdemo.service.NetWorkMonitorService;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
@@ -30,10 +31,11 @@ import java.util.List;
 @Page(name = "网速监测服务")
 public class NetWorkMonitorFragment extends XPageSimpleListFragment {
 
-    @Override
+       @Override
     protected void initArgs() {
         super.initArgs();
-        PermissionUtils.requestSystemAlertWindow(getActivity());
+//        PermissionUtils.requestSystemAlertWindow(getActivity());
+           FloatWindowPermission.getInstance().applyFloatWindowPermission(getContext());
     }
 
     @Override

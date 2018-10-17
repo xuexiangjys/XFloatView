@@ -17,6 +17,8 @@
 package com.xuexiang.xfloatviewdemo.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +28,8 @@ import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 
 import com.xuexiang.xfloatviewdemo.widget.smart.SmartView;
+
+import java.util.Objects;
 
 /**
  * 按钮控制盘的监听服务
@@ -39,6 +43,8 @@ public class SmartViewService extends Service {
 
     private static boolean isRunning = false;
 
+    public static final String CHANNEL_ID = "SmartView";
+
     /**
      * 开启
      *
@@ -46,7 +52,12 @@ public class SmartViewService extends Service {
      */
     public static void start(Context context) {
         if (!SmartViewService.isRunning()) {
-            context.startService(new Intent(context, SmartViewService.class));
+            Intent intent = new Intent(context, SmartViewService.class);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
         }
     }
 
@@ -92,13 +103,20 @@ public class SmartViewService extends Service {
         }
         isRunning = true;
         //此处为创建前台服务，但是通知栏消息为空，这样我们就可 以在不通知用户的情况下启动前台服务了
-        Notification notification = new Notification.Builder(this)
-                .setContentTitle("按钮救星")
+        Notification.Builder builder;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "按钮救星", NotificationManager.IMPORTANCE_HIGH);
+            Objects.requireNonNull(manager).createNotificationChannel(channel);
+            builder = new Notification.Builder(this, CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(this);
+        }
+        startForeground(101, builder.setContentTitle("按钮救星")
                 .setContentText("按钮救星正在运行...")
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .build();
-        startForeground(101, notification);
+                .build());
     }
 
     public void onDestroy() {

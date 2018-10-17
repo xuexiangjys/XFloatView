@@ -19,6 +19,7 @@ package com.xuexiang.xfloatview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -141,7 +142,11 @@ public abstract class XFloatView implements OnTouchListener {
     protected LayoutParams getFloatViewLayoutParams() {
         LayoutParams params = new LayoutParams();
         // 设置window type
-        params.type = LayoutParams.TYPE_PHONE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
         // 设置图片格式，效果为背景透明
         params.format = PixelFormat.RGBA_8888;
         // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）

@@ -17,6 +17,8 @@
 package com.xuexiang.xfloatviewdemo.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +31,8 @@ import android.support.annotation.RequiresApi;
 
 import com.xuexiang.xfloatviewdemo.widget.MonitorView;
 import com.xuexiang.xutil.data.SPUtils;
+
+import java.util.Objects;
 
 /**
  * 网络状态监听服务
@@ -54,6 +58,9 @@ public class NetWorkMonitorService extends Service {
     private MonitorView mMonitorView;
 
     private NetWorkMonitor mNetWorkMonitor;
+
+    public static final String CHANNEL_ID = "NetWorkMonitor";
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -95,7 +102,11 @@ public class NetWorkMonitorService extends Service {
             intent.putExtra(KEY_APP_UID, info.uid);
             intent.putExtra(KEY_APP_NAME, context.getPackageManager().getApplicationLabel(info));
         }
-        context.startService(intent);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     /**
@@ -113,13 +124,20 @@ public class NetWorkMonitorService extends Service {
     public void onCreate() {
         super.onCreate();
         //此处为创建前台服务，但是通知栏消息为空，这样我们就可 以在不通知用户的情况下启动前台服务了
-        Notification notification = new Notification.Builder(this)
-                .setContentTitle("流量监测")
+        Notification.Builder builder;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "流量监测", NotificationManager.IMPORTANCE_HIGH);
+            Objects.requireNonNull(manager).createNotificationChannel(channel);
+            builder = new Notification.Builder(this, CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(this);
+        }
+        startForeground(100, builder.setContentTitle("流量监测")
                 .setContentText("应用正在监测手机的流量")
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .build();
-        startForeground(100, notification);
+                .build());
     }
 
     private void init(int monitorType, int uid, String appName) {
