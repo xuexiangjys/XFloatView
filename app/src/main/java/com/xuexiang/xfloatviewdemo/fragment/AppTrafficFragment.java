@@ -80,7 +80,7 @@ public class AppTrafficFragment extends XPageFragment {
             public void onItemClick(View itemView, int pos) {
                 ApplicationInfo applicationInfo = mAppTrafficAdapter.getItem(pos).getApplicationInfo();
                 NetWorkMonitorService.start(getContext(), applicationInfo);
-                PackageUtils.openApp(getContext(), applicationInfo.packageName);
+                PackageUtils.switchApp(getContext(), applicationInfo.packageName);
             }
         });
     }
