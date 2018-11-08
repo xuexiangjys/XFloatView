@@ -20,7 +20,8 @@
         </activity>
 
         <service android:name=".service.NetWorkMonitorService" />
-        <service android:name=".service.SmartViewService" />
+        <service android:name=".service.SmartViewService"
+            android:exported="true"/>
     </application>
 
 </manifest>
