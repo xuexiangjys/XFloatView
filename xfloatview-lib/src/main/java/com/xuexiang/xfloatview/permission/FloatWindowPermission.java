@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.xuexiang.xfloatview.permission.rom.HuaweiUtils;
@@ -47,7 +48,11 @@ public class FloatWindowPermission {
 
     private static volatile FloatWindowPermission sInstance;
 
-    private Dialog dialog;
+    private IPermissionApplyPrompter mIPermissionApplyPrompter;
+
+    private FloatWindowPermission() {
+        mIPermissionApplyPrompter = new DefaultPermissionApplyPrompter();
+    }
 
     public static FloatWindowPermission getInstance() {
         if (sInstance == null) {
@@ -60,10 +65,11 @@ public class FloatWindowPermission {
         return sInstance;
     }
 
-    public void applyFloatWindowPermission(Context context) {
+    public Dialog applyFloatWindowPermission(Context context) {
         if (!checkPermission(context)) {
-            applyPermission(context);
+            return applyPermission(context);
         }
+        return null;
     }
 
     private boolean checkPermission(Context context) {
@@ -123,26 +129,27 @@ public class FloatWindowPermission {
         }
     }
 
-    private void applyPermission(Context context) {
+    private Dialog applyPermission(Context context) {
         if (Build.VERSION.SDK_INT < 23) {
             if (RomUtils.checkIsMiuiRom()) {
-                miuiROMPermissionApply(context);
+                return miuiROMPermissionApply(context);
             } else if (RomUtils.checkIsMeizuRom()) {
-                meizuROMPermissionApply(context);
+                return meizuROMPermissionApply(context);
             } else if (RomUtils.checkIsHuaweiRom()) {
-                huaweiROMPermissionApply(context);
+                return huaweiROMPermissionApply(context);
             } else if (RomUtils.checkIs360Rom()) {
-                ROM360PermissionApply(context);
+                return ROM360PermissionApply(context);
             } else if (RomUtils.checkIsOppoRom()) {
-                oppoROMPermissionApply(context);
+                return oppoROMPermissionApply(context);
             }
         } else {
-            commonROMPermissionApply(context);
+            return commonROMPermissionApply(context);
         }
+        return null;
     }
 
-    private void ROM360PermissionApply(final Context context) {
-        showConfirmDialog(context, new OnConfirmResult() {
+    private Dialog ROM360PermissionApply(final Context context) {
+        return showConfirmDialog(context, new OnConfirmResult() {
             @Override
             public void confirmResult(boolean confirm) {
                 if (confirm) {
@@ -154,8 +161,8 @@ public class FloatWindowPermission {
         });
     }
 
-    private void huaweiROMPermissionApply(final Context context) {
-        showConfirmDialog(context, new OnConfirmResult() {
+    private Dialog huaweiROMPermissionApply(final Context context) {
+        return showConfirmDialog(context, new OnConfirmResult() {
             @Override
             public void confirmResult(boolean confirm) {
                 if (confirm) {
@@ -167,8 +174,8 @@ public class FloatWindowPermission {
         });
     }
 
-    private void meizuROMPermissionApply(final Context context) {
-        showConfirmDialog(context, new OnConfirmResult() {
+    private Dialog meizuROMPermissionApply(final Context context) {
+        return showConfirmDialog(context, new OnConfirmResult() {
             @Override
             public void confirmResult(boolean confirm) {
                 if (confirm) {
@@ -180,8 +187,8 @@ public class FloatWindowPermission {
         });
     }
 
-    private void miuiROMPermissionApply(final Context context) {
-        showConfirmDialog(context, new OnConfirmResult() {
+    private Dialog miuiROMPermissionApply(final Context context) {
+        return showConfirmDialog(context, new OnConfirmResult() {
             @Override
             public void confirmResult(boolean confirm) {
                 if (confirm) {
@@ -193,8 +200,8 @@ public class FloatWindowPermission {
         });
     }
 
-    private void oppoROMPermissionApply(final Context context) {
-        showConfirmDialog(context, new OnConfirmResult() {
+    private Dialog oppoROMPermissionApply(final Context context) {
+        return showConfirmDialog(context, new OnConfirmResult() {
             @Override
             public void confirmResult(boolean confirm) {
                 if (confirm) {
@@ -209,13 +216,13 @@ public class FloatWindowPermission {
     /**
      * 通用 rom 权限申请
      */
-    private void commonROMPermissionApply(final Context context) {
+    private Dialog commonROMPermissionApply(final Context context) {
         //这里也一样，魅族系统需要单独适配
         if (RomUtils.checkIsMeizuRom()) {
-            meizuROMPermissionApply(context);
+            return meizuROMPermissionApply(context);
         } else {
             if (Build.VERSION.SDK_INT >= 23) {
-                showConfirmDialog(context, new OnConfirmResult() {
+                return showConfirmDialog(context, new OnConfirmResult() {
                     @Override
                     public void confirmResult(boolean confirm) {
                         if (confirm) {
@@ -232,6 +239,7 @@ public class FloatWindowPermission {
                 });
             }
         }
+        return null;
     }
 
     public static void commonROMPermissionApplyInternal(Activity activity) {
@@ -255,37 +263,61 @@ public class FloatWindowPermission {
         }
     }
 
-    private void showConfirmDialog(Context context, OnConfirmResult result) {
-        showConfirmDialog(context, "您的手机没有授予悬浮窗权限，请开启后再试", result);
+    private Dialog showConfirmDialog(Context context, OnConfirmResult result) {
+        return showConfirmDialog(context, "您的手机没有授予悬浮窗权限，请开启后再试", result);
     }
 
-    private void showConfirmDialog(Context context, String message, final OnConfirmResult result) {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
-
-        dialog = new AlertDialog.Builder(context).setCancelable(true).setTitle("")
-                .setMessage(message)
-                .setPositiveButton("现在去开启",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.confirmResult(true);
-                                dialog.dismiss();
-                            }
-                        }).setNegativeButton("暂不开启",
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                result.confirmResult(false);
-                                dialog.dismiss();
-                            }
-                        }).create();
-        dialog.show();
+    /**
+     * 设置悬浮权限申请提示
+     *
+     * @param iPermissionApplyPrompter
+     * @return
+     */
+    public FloatWindowPermission setIPermissionApplyPrompter(@NonNull IPermissionApplyPrompter iPermissionApplyPrompter) {
+        mIPermissionApplyPrompter = iPermissionApplyPrompter;
+        return this;
     }
 
-    private interface OnConfirmResult {
+    private Dialog showConfirmDialog(Context context, String message, final OnConfirmResult result) {
+        return mIPermissionApplyPrompter.showPermissionApplyDialog(context, message, result);
+    }
+
+    public interface OnConfirmResult {
+        /**
+         * @param confirm 是否确认申请悬浮权限
+         */
         void confirmResult(boolean confirm);
     }
+
+
+    /**
+     * 默认悬浮权限申请提示
+     */
+    public class DefaultPermissionApplyPrompter implements IPermissionApplyPrompter {
+
+        @Override
+        public Dialog showPermissionApplyDialog(Context context, String message, final OnConfirmResult result) {
+            Dialog dialog = new AlertDialog.Builder(context).setCancelable(true).setTitle("")
+                    .setMessage(message)
+                    .setPositiveButton("现在去开启",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    result.confirmResult(true);
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton("暂不开启",
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    result.confirmResult(false);
+                                    dialog.dismiss();
+                                }
+                            }).create();
+            dialog.show();
+            return dialog;
+        }
+    }
+
 }
